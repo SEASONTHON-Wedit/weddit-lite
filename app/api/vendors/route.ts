@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+export const runtime = 'nodejs'
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
@@ -54,7 +56,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(filteredVendors)
   } catch (error) {
     console.error('Error fetching vendors:', error)
-    return NextResponse.json({ error: 'Failed to fetch vendors' }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: '업체 데이터를 불러오지 못했습니다.',
+        hint:
+          process.env.VERCEL
+            ? 'Vercel에서는 SQLite가 500을 유발할 수 있어요. /tmp로 DB를 복사해서 사용하는 방식 또는 외부 DB(Postgres/Turso)를 권장합니다.'
+            : 'DATABASE_URL 설정 및 DB 파일 경로를 확인해주세요.',
+      },
+      { status: 500 },
+    )
   }
 }
 

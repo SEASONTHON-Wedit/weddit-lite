@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from 'react'
 export default function Home() {
   const [vendors, setVendors] = useState<Vendor[]>([])
   const [loading, setLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null)
   const [minPrice, setMinPrice] = useState('')
@@ -20,6 +21,7 @@ export default function Home() {
 
   const fetchVendors = useCallback(async () => {
     setLoading(true)
+    setErrorMessage(null)
     try {
       const params = new URLSearchParams()
       if (selectedCategory) params.append('category', selectedCategory)
@@ -28,10 +30,21 @@ export default function Home() {
       if (maxPrice) params.append('maxPrice', maxPrice)
 
       const response = await fetch(`/api/vendors?${params.toString()}`)
+      if (!response.ok) {
+        let msg = `업체 목록을 불러오지 못했습니다. (${response.status})`
+        try {
+          const err = await response.json()
+          if (err?.error) msg = String(err.error)
+        } catch {}
+        throw new Error(msg)
+      }
       const data = await response.json()
-      setVendors(data)
+      if (!Array.isArray(data)) throw new Error('서버 응답 형식이 올바르지 않습니다.')
+      setVendors(data as Vendor[])
     } catch (error) {
       console.error('Error fetching vendors:', error)
+      setVendors([])
+      setErrorMessage(error instanceof Error ? error.message : '업체 목록을 불러오는 중 오류가 발생했습니다.')
     } finally {
       setLoading(false)
     }

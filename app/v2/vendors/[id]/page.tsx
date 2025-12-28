@@ -28,6 +28,7 @@ export default function V2VendorDetailPage() {
   const params = useParams()
   const [vendor, setVendor] = useState<Vendor | null>(null)
   const [loading, setLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   // single 선택: priceId 또는 NONE_OPTION
   const [selectedSingleByItemId, setSelectedSingleByItemId] = useState<Record<string, string>>({})
   // multi 선택: 선택된 priceId 배열
@@ -43,8 +44,21 @@ export default function V2VendorDetailPage() {
     setLoading(true)
     try {
       const response = await fetch(`/api/vendors/${id}`)
-      const data = await response.json()
+      if (!response.ok) {
+        let msg = `업체를 불러오지 못했습니다. (${response.status})`
+        try {
+          const err = await response.json()
+          if (err?.error) msg = String(err.error)
+        } catch {}
+        throw new Error(msg)
+      }
+      const data = (await response.json()) as Vendor
       setVendor(data)
+      setErrorMessage(null)
+    } catch (error) {
+      console.error('Error fetching vendor:', error)
+      setVendor(null)
+      setErrorMessage(error instanceof Error ? error.message : '업체를 불러오는 중 오류가 발생했습니다.')
     } finally {
       setLoading(false)
     }
@@ -172,8 +186,15 @@ export default function V2VendorDetailPage() {
 
   if (!vendor) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-600">
-        업체를 찾을 수 없습니다.
+      <div className="min-h-screen flex items-center justify-center text-gray-600 text-center px-4">
+        {errorMessage ? (
+          <div>
+            <div className="font-semibold text-gray-900">업체를 불러오지 못했어요.</div>
+            <div className="mt-2 text-sm">{errorMessage}</div>
+          </div>
+        ) : (
+          '업체를 찾을 수 없습니다.'
+        )}
       </div>
     )
   }

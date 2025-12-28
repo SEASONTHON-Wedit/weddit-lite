@@ -11,6 +11,7 @@ export default function VendorDetailPage() {
   const params = useParams()
   const [vendor, setVendor] = useState<Vendor | null>(null)
   const [loading, setLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
     if (params.id) {
@@ -20,12 +21,23 @@ export default function VendorDetailPage() {
 
   const fetchVendor = async (id: string) => {
     setLoading(true)
+    setErrorMessage(null)
     try {
       const response = await fetch(`/api/vendors/${id}`)
-      const data = await response.json()
+      if (!response.ok) {
+        let msg = `업체를 불러오지 못했습니다. (${response.status})`
+        try {
+          const err = await response.json()
+          if (err?.error) msg = String(err.error)
+        } catch {}
+        throw new Error(msg)
+      }
+      const data = (await response.json()) as Vendor
       setVendor(data)
     } catch (error) {
       console.error('Error fetching vendor:', error)
+      setVendor(null)
+      setErrorMessage(error instanceof Error ? error.message : '업체를 불러오는 중 오류가 발생했습니다.')
     } finally {
       setLoading(false)
     }
@@ -46,7 +58,16 @@ export default function VendorDetailPage() {
   if (!vendor) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white/90 text-shadow text-lg">업체를 찾을 수 없습니다.</div>
+        <div className="text-white/90 text-shadow text-lg text-center">
+          {errorMessage ? (
+            <>
+              <div className="font-semibold">업체를 불러오지 못했어요.</div>
+              <div className="mt-2 text-sm text-white/80">{errorMessage}</div>
+            </>
+          ) : (
+            '업체를 찾을 수 없습니다.'
+          )}
+        </div>
       </div>
     )
   }

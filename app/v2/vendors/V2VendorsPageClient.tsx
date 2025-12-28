@@ -33,6 +33,7 @@ export default function V2VendorsPageClient() {
 
   const [vendors, setVendors] = useState<Vendor[]>([])
   const [loading, setLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(initial.category)
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(initial.region)
   const [minPrice, setMinPrice] = useState(initial.minPrice)
@@ -55,6 +56,7 @@ export default function V2VendorsPageClient() {
 
   const fetchVendors = useCallback(async () => {
     setLoading(true)
+    setErrorMessage(null)
     try {
       const params = new URLSearchParams()
       if (selectedCategory) params.append('category', selectedCategory)
@@ -63,10 +65,22 @@ export default function V2VendorsPageClient() {
       if (maxPrice) params.append('maxPrice', maxPrice)
 
       const response = await fetch(`/api/vendors?${params.toString()}`)
+      if (!response.ok) {
+        let msg = `업체 목록을 불러오지 못했습니다. (${response.status})`
+        try {
+          const err = await response.json()
+          if (err?.error) msg = String(err.error)
+        } catch {}
+        throw new Error(msg)
+      }
+
       const data = await response.json()
-      setVendors(data)
+      if (!Array.isArray(data)) throw new Error('서버 응답 형식이 올바르지 않습니다.')
+      setVendors(data as Vendor[])
     } catch (error) {
       console.error('Error fetching vendors:', error)
+      setVendors([])
+      setErrorMessage(error instanceof Error ? error.message : '업체 목록을 불러오는 중 오류가 발생했습니다.')
     } finally {
       setLoading(false)
     }
@@ -237,6 +251,11 @@ export default function V2VendorsPageClient() {
         <Reveal className="mt-5">
           {loading ? (
             <div className="py-12 text-gray-600">로딩 중...</div>
+          ) : errorMessage ? (
+            <div className="py-12 text-gray-600 text-center">
+              <div className="font-semibold text-gray-900">업체 데이터를 불러오지 못했어요.</div>
+              <div className="mt-2 text-sm">{errorMessage}</div>
+            </div>
           ) : vendors.length === 0 ? (
             <div className="py-12 text-gray-600">조건에 맞는 업체가 없습니다.</div>
           ) : (
