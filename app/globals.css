@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --glass-bg: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --glass-border-strong: rgba(255, 255, 255, 0.45);
+  --glass-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  --nav-h: 88px;
+  --nav-offset: var(--nav-h);
+}
+
+/* 반응형 전체 스케일(텍스트/여백/라운드 등 rem 기반 요소) */
+html {
+  font-size: 16px;
+}
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+@media (max-width: 380px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: url("/mockImage/background.png") center / cover fixed no-repeat;
+  color: rgba(255, 255, 255, 0.92);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* 잔디 배경 위 가독성용 오버레이 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 700px at 20% 15%, rgba(0, 0, 0, 0.20), transparent 55%),
+    radial-gradient(900px 600px at 80% 20%, rgba(0, 0, 0, 0.18), transparent 55%),
+    linear-gradient(to bottom, rgba(0,0,0,0.34), rgba(0,0,0,0.52));
+  z-index: -1;
+}
+
+/* 공용 유틸(테일윈드와 함께 사용) */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.panel-contrast {
+  background: rgba(0, 0, 0, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.text-shadow {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.65);
+}
+
+/* 모바일 가로 스크롤 칩/필터용 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* v2 LineChartLight: draw animation should run once on initial mount, not on every rerender */
+@keyframes lc-line-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes lc-area-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.lc-line-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: lc-line-draw 850ms ease-out forwards;
+}
+.lc-area-fade {
+  opacity: 0;
+  animation: lc-area-fade 600ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-line-draw, .lc-area-fade {
+    animation: none !important;
+    opacity: 1 !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* v2 hero particles: explicit DOM dots (reliable visibility) */
+@keyframes hero-dot-float-a {
+  0% { transform: translate(0, 0); opacity: .55; }
+  50% { transform: translate(12px, -4px); opacity: 1; }
+  100% { transform: translate(0, 0); opacity: .55; }
+}
+@keyframes hero-dot-float-b {
+  0% { transform: translate(0, 0); opacity: .35; }
+  50% { transform: translate(16px, 3px); opacity: .9; }
+  100% { transform: translate(0, 0); opacity: .35; }
+}
+@keyframes hero-dot-float-c {
+  0% { transform: translate(0, 0); opacity: .25; }
+  50% { transform: translate(10px, -6px); opacity: .85; }
+  100% { transform: translate(0, 0); opacity: .25; }
+}
+.hero-dot{
+  display: inline-block;
+  border-radius: 999px;
+  background: rgba(16,185,129,0.98);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.10);
+  margin-left: 6px;
+}
+.hero-dot1{ width: 10px; height: 10px; animation: hero-dot-float-a 1.8s ease-in-out infinite; }
+.hero-dot2{ width: 7px; height: 7px; animation: hero-dot-float-b 2.2s ease-in-out infinite; }
+.hero-dot3{ width: 5px; height: 5px; animation: hero-dot-float-c 2.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-dot1,
+  .hero-dot2,
+  .hero-dot3{
+    animation: none !important;
+  }
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.92);
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.soft-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+/* 스크롤 등장 애니메이션 */
+.reveal {
+  transform: translateY(14px);
+  opacity: 0;
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 700ms ease;
+  will-change: transform, opacity;
+}
+.reveal.reveal-in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}

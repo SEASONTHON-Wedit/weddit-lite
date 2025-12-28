@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  STUDIO
+  DRESS
+  MAKEUP
+  WEDDING_HALL
+}
+
+enum Region {
+  SEOUL
+  GYEONGGI
+  BUSAN
+  DAEGU
+  INCHEON
+  GWANGJU
+  DAEJEON
+  ULSAN
+  GANGWON
+  CHUNGBUK
+  CHUNGNAM
+  JEONBUK
+  JEONNAM
+  GYEONGBUK
+  GYEONGNAM
+  JEJU
+}
+
+model Vendor {
+  id          String   @id @default(cuid())
+  name        String
+  category    Category
+  region      Region
+  address     String?
+  phone       String?
+  website     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items Item[]
+
+  @@index([category])
+  @@index([region])
+  @@index([category, region])
+}
+
+model Item {
+  id          String   @id @default(cuid())
+  vendorId    String
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vendor Vendor @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  prices Price[]
+
+  @@index([vendorId])
+}
+
+model Price {
+  id          String   @id @default(cuid())
+  itemId      String
+  name        String?  // 가격 옵션 이름 (예: "기본 패키지", "프리미엄 패키지")
+  price       Int      // 가격 (원 단위)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId])
+}
