@@ -51,11 +51,11 @@ export default function LineChart({
   const step = shownLabels.length > 8 ? Math.ceil(shownLabels.length / 6) : 1
 
   return (
-    <div className={`panel-contrast rounded-3xl p-6 sm:p-8 ${className}`}>
+    <div className={`panel-contrast rounded-3xl p-6 lg:p-8 ${className}`}>
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <div className="text-base text-white/90 text-shadow">통계(참가격)</div>
-          <h3 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight text-white text-shadow">
+          <h3 className="mt-1 text-2xl lg:text-3xl font-semibold tracking-tight text-white text-shadow">
             {title}
           </h3>
           {subtitle && <p className="mt-2 text-base text-white/90 text-shadow">{subtitle}</p>}
@@ -68,7 +68,7 @@ export default function LineChart({
       </div>
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-white/25 bg-black/15">
-        <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-[260px] sm:h-[320px]">
+        <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-[260px] lg:h-[320px]">
           <defs>
             <linearGradient id="lineArea" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="rgba(255,255,255,0.30)" />

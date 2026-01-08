@@ -15,7 +15,7 @@ function ensureSqliteDbOnVercel() {
   const isFile = !url || url.startsWith('file:')
   if (!isFile) return // Postgres 등 외부 DB를 쓰는 경우는 건드리지 않음
 
-  const target = '/tmp/weddit-lite.db'
+  const target = '/tmp/wedit.db'
 
   // 소스 DB 파일 찾기: (1) DATABASE_URL이 file:로 주어졌다면 그 경로, (2) prisma/dev.db, (3) dev.db
   const candidates: string[] = []

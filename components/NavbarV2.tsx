@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 const navItems = [
-  { href: '/v2', label: '홈' },
-  { href: '/v2/vendors', label: '업체' },
+  { href: '/', label: '홈' },
+  { href: '/vendors', label: '업체' },
 ]
 
 export default function NavbarV2() {
@@ -130,23 +130,23 @@ export default function NavbarV2() {
         }`}
       >
         <div className="pt-[env(safe-area-inset-top)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8 py-2 lg:py-3">
           <div className="relative">
           <div
             ref={barRef}
-            className="rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between bg-white/90 backdrop-blur border border-black/10 shadow-sm"
+            className="rounded-2xl px-4 lg:px-6 py-3 flex items-center justify-between bg-white/90 backdrop-blur border border-black/10 shadow-sm"
           >
-            <Link href="/v2" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl border border-black/10 bg-white grid place-items-center">
                 <span className="text-sm font-semibold tracking-tight text-gray-900">W</span>
               </div>
               <div className="leading-tight">
-                <div className="text-sm font-semibold tracking-tight text-gray-900">Weddit Lite</div>
+                <div className="text-sm font-semibold tracking-tight text-gray-900">Wedit</div>
                 <div className="text-[11px] text-gray-600">가격 비교 · 옵션 추가금 · 통계</div>
               </div>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-2">
+            <nav className="hidden lg:flex items-center gap-2">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -157,26 +157,26 @@ export default function NavbarV2() {
                 </Link>
               ))}
               <Link
-                href="/v2/notices"
+                href="/notices"
                 className="ml-1 px-3 py-2 rounded-full text-sm font-semibold text-gray-800 border border-black/10 hover:bg-black/5 transition-colors"
               >
                 공지사항
               </Link>
               <Link
-                href="/v2/cart"
+                href="/cart"
                 className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-900 text-white hover:bg-gray-800 transition-colors"
               >
                 비교함
               </Link>
               <Link
-                href="/v2/vendors"
+                href="/vendors"
                 className="ml-1 px-4 py-2 rounded-full text-sm font-semibold bg-gray-900 text-white hover:bg-gray-800 transition-colors"
               >
                 업체 보기
               </Link>
             </nav>
 
-            <div className="md:hidden flex items-center gap-2">
+            <div className="lg:hidden flex items-center gap-2">
               <button
                 type="button"
                 onClick={toggleMenu}
@@ -191,7 +191,7 @@ export default function NavbarV2() {
 
           {(open || closing) && (
             <div
-              className={`absolute left-0 right-0 top-full mt-2 rounded-2xl border border-black/10 bg-white/95 backdrop-blur shadow-sm overflow-hidden md:hidden transition-all duration-200 ease-out ${
+              className={`absolute left-0 right-0 top-full mt-2 rounded-2xl border border-black/10 bg-white/95 backdrop-blur shadow-sm overflow-hidden lg:hidden transition-all duration-200 ease-out ${
                 closing ? 'opacity-0 -translate-y-1 pointer-events-none' : 'opacity-100 translate-y-0'
               }`}
             >
@@ -207,21 +207,21 @@ export default function NavbarV2() {
                   </Link>
                 ))}
                 <Link
-                  href="/v2/notices"
+                  href="/notices"
                   onClick={closeMenu}
                   className="px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-black/5 transition-colors"
                 >
                   공지사항
                 </Link>
                 <Link
-                  href="/v2/cart"
+                  href="/cart"
                   onClick={closeMenu}
                   className="px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-black/5 transition-colors"
                 >
                   비교함
                 </Link>
                 <Link
-                  href="/v2/vendors"
+                  href="/vendors"
                   onClick={closeMenu}
                   className="px-4 py-3 text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 transition-colors"
                 >

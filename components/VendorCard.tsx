@@ -24,8 +24,8 @@ export default function VendorCard({ vendor, variant = 'light', hrefBase = '/ven
       href={`${hrefBase}/${vendor.id}`}
       className={
         variant === 'glass'
-          ? 'block rounded-3xl panel-contrast p-4 sm:p-6 transition-all hover:bg-black/55 hover:border-white/45'
-          : 'block rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-300'
+          ? 'block rounded-3xl panel-contrast p-4 lg:p-6 transition-all hover:bg-black/55 hover:border-white/45'
+          : 'block rounded-2xl border border-gray-200 bg-white p-4 lg:p-6 shadow-sm transition-all hover:shadow-md hover:border-gray-300'
       }
     >
       <div className="flex items-start justify-between">

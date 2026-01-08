@@ -45,11 +45,11 @@ export default function StatsChart({ vendors }: { vendors: Vendor[] }) {
   )
 
   return (
-    <div className="panel rounded-3xl p-6 sm:p-8">
+    <div className="panel rounded-3xl p-6 lg:p-8">
       <div className="flex items-start justify-between gap-6 flex-wrap">
         <div>
           <div className="text-base text-white/90 text-shadow">현재 결혼업체 가격 통계</div>
-          <h3 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight text-white/95">
+          <h3 className="mt-1 text-2xl lg:text-3xl font-semibold tracking-tight text-white/95">
             한눈에 보는 가격 분포
           </h3>
           <p className="mt-2 text-base text-white/85 text-shadow">
@@ -87,8 +87,8 @@ export default function StatsChart({ vendors }: { vendors: Vendor[] }) {
               typeof r.median === 'number' ? Math.max(8, Math.round((r.median / maxMedian) * 100)) : 8
             return (
               <div key={r.cat} className="grid grid-cols-12 gap-3 items-center">
-                <div className="col-span-3 sm:col-span-2 text-base text-white/90 text-shadow">{r.label}</div>
-                <div className="col-span-6 sm:col-span-7">
+                <div className="col-span-3 lg:col-span-2 text-base text-white/90 text-shadow">{r.label}</div>
+                <div className="col-span-6 lg:col-span-7">
                   <div className="h-11 rounded-2xl border border-white/28 bg-black/20 overflow-hidden">
                     <div
                       className="h-full rounded-2xl bg-white/35 border border-white/45"

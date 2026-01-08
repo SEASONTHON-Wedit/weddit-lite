@@ -15,6 +15,54 @@ type LineChartLightProps = {
   bare?: boolean
 }
 
+function niceNum(range: number, round: boolean) {
+  // "Nice Numbers for Graph Labels" 스타일
+  const exponent = Math.floor(Math.log10(Math.max(range, 1e-9)))
+  const fraction = range / Math.pow(10, exponent)
+  let niceFraction: number
+  if (round) {
+    if (fraction < 1.5) niceFraction = 1
+    else if (fraction < 3) niceFraction = 2
+    else if (fraction < 7) niceFraction = 5
+    else niceFraction = 10
+  } else {
+    if (fraction <= 1) niceFraction = 1
+    else if (fraction <= 2) niceFraction = 2
+    else if (fraction <= 5) niceFraction = 5
+    else niceFraction = 10
+  }
+  return niceFraction * Math.pow(10, exponent)
+}
+
+function niceScaleMaxTicks(min: number, max: number, maxTicks: number) {
+  // tickCount는 "구간 수" (예: 1000~1500 step 100 => 5구간, 라벨은 6개)
+  const rawRange = Math.max(1e-9, max - min)
+  // 시작은 4~5구간 정도를 목표로
+  let step = niceNum(rawRange / Math.max(1, Math.min(5, maxTicks)), true)
+  let niceMin = Math.floor(min / step) * step
+  let niceMax = Math.ceil(max / step) * step
+
+  const tickCount = () => Math.max(1, Math.round((niceMax - niceMin) / step))
+
+  // 너무 촘촘하면 step을 키운다(최대 8회만 조정)
+  for (let i = 0; i < 8; i++) {
+    if (tickCount() <= maxTicks) break
+    step = niceNum(step * 1.8, true)
+    niceMin = Math.floor(min / step) * step
+    niceMax = Math.ceil(max / step) * step
+  }
+
+  // 너무 듬성하면 step을 줄인다(최소 3구간 정도)
+  for (let i = 0; i < 8; i++) {
+    if (tickCount() >= Math.min(3, maxTicks)) break
+    step = niceNum(step / 1.8, true)
+    niceMin = Math.floor(min / step) * step
+    niceMax = Math.ceil(max / step) * step
+  }
+
+  return { niceMin, niceMax, step, tickCount: tickCount() }
+}
+
 const LineChartLight = ({
   title,
   subtitle,
@@ -55,20 +103,20 @@ const LineChartLight = ({
   const plotH = h - top - bottom
 
   const safeValues = values.length ? values : [0]
-  const min = Math.min(...safeValues)
-  const max = Math.max(...safeValues)
-  const range = Math.max(1, max - min)
+  const rawMin = Math.min(...safeValues)
+  const rawMax = Math.max(...safeValues)
+  const rawRange = Math.max(1, rawMax - rawMin)
 
-  // y축 headroom: 최고점이 꼭대기에 붙지 않게 약간 위 여유를 추가
-  const headroom = range * 0.14
-  const floorroom = range * 0.06
-  const minAdj = min - floorroom
-  const maxAdj = max + headroom
-  const rangeAdj = Math.max(1, maxAdj - minAdj)
+  // y축은 "딱 떨어지는" 단위를 우선. 데이터에 살짝 패딩을 준 뒤 nice scale로 맞춘다.
+  const paddedMin = rawMin - rawRange * 0.06
+  const paddedMax = rawMax + rawRange * 0.14
+
+  const { niceMin, niceMax, step: yStep, tickCount: yTicks } = niceScaleMaxTicks(paddedMin, paddedMax, 6)
+  const rangeAdj = Math.max(1, niceMax - niceMin)
 
   const n = Math.max(1, values.length)
   const x = (i: number) => left + (plotW * (n === 1 ? 0 : i / (n - 1)))
-  const y = (v: number) => top + plotH - ((v - minAdj) / rangeAdj) * plotH
+  const y = (v: number) => top + plotH - ((v - niceMin) / rangeAdj) * plotH
 
   const points = values.map((v, i) => `${x(i)},${y(v)}`).join(' ')
   const linePath = values.length
@@ -76,10 +124,9 @@ const LineChartLight = ({
     : `M ${left} ${top + plotH} L ${left + plotW} ${top + plotH}`
   const area = `${left},${top + plotH} ${points} ${left + plotW},${top + plotH}`
 
-  const gridLines = 4
-  const grid = Array.from({ length: gridLines + 1 }).map((_, i) => {
-    const yy = top + (plotH * i) / gridLines
-    const val = Math.round(maxAdj - (rangeAdj * i) / gridLines)
+  const grid = Array.from({ length: yTicks + 1 }).map((_, i) => {
+    const yy = top + (plotH * i) / yTicks
+    const val = Math.round(niceMax - yStep * i)
     return { yy, val }
   })
 
@@ -110,9 +157,8 @@ const LineChartLight = ({
       {!plain && (
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <div>
-            <div className="text-sm text-gray-600">공공 통계(참가격)</div>
-            <h3 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">{title}</h3>
-            {subtitle && <p className="mt-2 text-sm sm:text-base text-gray-600">{subtitle}</p>}
+            <h3 className="mt-2 text-2xl lg:text-4xl font-semibold tracking-tight text-gray-900">{title}</h3>
+            {subtitle && <p className="mt-3 text-base lg:text-lg text-gray-600">{subtitle}</p>}
           </div>
           {unit && (
             <div className="text-sm text-gray-700 border border-black/10 bg-white px-3 py-2 rounded-full">
@@ -122,7 +168,7 @@ const LineChartLight = ({
         </div>
       )}
 
-      <div className={`${plain ? '' : 'mt-5 sm:mt-6'} ${chartBoxClass}`}>
+      <div className={`${plain ? '' : 'mt-5 lg:mt-6'} ${chartBoxClass}`}>
         <svg
           viewBox={`0 0 ${w} ${h}`}
           className="w-full"

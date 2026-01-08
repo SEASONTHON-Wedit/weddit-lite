@@ -32,11 +32,11 @@ const cards = [
 
 export default function PhotoCardsLight() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
       {cards.map((c) => (
         <Link
           key={c.slug}
-          href={`/v2/stories/${c.slug}`}
+          href={`/stories/${c.slug}`}
           className="group relative overflow-hidden rounded-3xl border border-white/20 bg-black/0 hover:bg-black/0 transition-colors"
         >
           <div className="relative aspect-square">
@@ -53,10 +53,10 @@ export default function PhotoCardsLight() {
             <div className="absolute inset-x-0 bottom-0 p-5">
               <div className="flex items-end justify-between gap-3">
                 <div>
-                  <h4 className="text-xl sm:text-2xl font-semibold text-white tracking-tight text-shadow">
+                  <h4 className="text-xl lg:text-2xl font-semibold text-white tracking-tight text-shadow">
                     {c.title}
                   </h4>
-                  <p className="mt-2 text-sm sm:text-base text-white/90 leading-relaxed text-shadow">
+                  <p className="mt-2 text-sm lg:text-base text-white/90 leading-relaxed text-shadow">
                     {c.desc}
                   </p>
                 </div>

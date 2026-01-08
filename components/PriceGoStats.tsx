@@ -47,10 +47,10 @@ export default function PriceGoStats() {
 
   if (loading || !data) {
     return (
-      <div className="panel-contrast rounded-3xl p-6 sm:p-8">
+      <div className="panel-contrast rounded-3xl p-6 lg:p-8">
         <div className="h-5 w-48 rounded bg-white/10" />
         <div className="mt-3 h-9 w-80 rounded bg-white/10" />
-        <div className="mt-6 h-[260px] sm:h-[320px] rounded-2xl border border-white/20 bg-black/15" />
+        <div className="mt-6 h-[260px] lg:h-[320px] rounded-2xl border border-white/20 bg-black/15" />
       </div>
     )
   }

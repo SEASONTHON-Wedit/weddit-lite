@@ -30,14 +30,14 @@ const cards = [
 
 export default function PhotoCards() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
       {cards.map((c) => (
         <Link
           key={c.slug}
           href={`/stories/${c.slug}`}
           className="group relative overflow-hidden rounded-3xl border border-white/30 bg-white/5 hover:bg-white/10 transition-colors"
         >
-          <div className="relative h-64 sm:h-72 lg:h-80">
+          <div className="relative h-64 lg:h-80">
             <Image
               src={c.img}
               alt={c.title}

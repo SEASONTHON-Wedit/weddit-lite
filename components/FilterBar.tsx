@@ -1,6 +1,6 @@
 'use client'
 
-import { Category, Region, CategoryLabels, RegionLabels } from '@/types'
+import { Category, CategoryLabels, Region, RegionLabels } from '@/types'
 import { useState } from 'react'
 
 interface FilterBarProps {
@@ -43,23 +43,23 @@ export default function FilterBar({
   const labelClass = isGlass ? 'text-white/90 text-shadow' : 'text-gray-700'
   const pillSelected = isGlass
     ? 'bg-white/25 text-white border border-white/60 text-shadow'
-    : 'bg-gray-900 text-white'
+    : 'bg-gray-900 text-white-700'
   const pill = isGlass
     ? 'bg-black/15 text-white hover:bg-black/25 border border-white/30 text-shadow'
-    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+    : 'bg-gray-200 text-gray-700 hover:bg-gray-200'
   const selectClass = isGlass
     ? 'px-4 py-2 rounded-full text-sm font-medium bg-black/15 text-white border border-white/35 focus:ring-2 focus:ring-white/60 focus:outline-none'
-    : 'px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 border-0 focus:ring-2 focus:ring-gray-900 focus:outline-none'
+    : 'px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 border-0 focus:ring-2 focus:ring-gray-900 focus:outline-none'
   const toggleClass = isGlass
     ? 'px-4 py-2 rounded-full text-sm font-medium bg-black/15 text-white hover:bg-black/25 transition-colors border border-white/35 text-shadow'
-    : 'px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors'
+    : 'px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-200 transition-colors'
   const inputClass = isGlass
     ? 'px-4 py-2 rounded-lg text-sm border border-white/35 bg-black/15 text-white placeholder:text-white/70 focus:ring-2 focus:ring-white/60 focus:outline-none w-32'
     : 'px-4 py-2 rounded-lg text-sm border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:outline-none w-32'
 
   return (
     <div className={`${wrapClass} ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="py-4">
           {/* 카테고리(항상 1줄 스크롤) */}
           <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export default function FilterBar({
             <div className="flex gap-2 overflow-x-auto no-scrollbar flex-nowrap">
               <button
                 onClick={() => onCategoryChange(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedCategory === null ? pillSelected : pill
                 }`}
                 style={{ whiteSpace: 'nowrap' }}
@@ -78,7 +78,7 @@ export default function FilterBar({
                 <button
                   key={key}
                   onClick={() => onCategoryChange(key as Category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     selectedCategory === key ? pillSelected : pill
                   }`}
                   style={{ whiteSpace: 'nowrap' }}

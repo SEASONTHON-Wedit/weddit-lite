@@ -1,6 +1,7 @@
 'use client'
 
-const COOKIE_KEY = 'weddit_compare'
+const COOKIE_KEY = 'wedit_compare'
+const LEGACY_COOKIE_KEY = 'weddit_compare'
 
 export type CompareSelection = {
   single?: Record<string, string> // itemId -> priceId | '__none__'
@@ -30,7 +31,16 @@ function writeCookie(key: string, value: string) {
 
 export function getCompareEntries(): CompareEntry[] {
   try {
-    const raw = readCookie(COOKIE_KEY)
+    let raw = readCookie(COOKIE_KEY)
+    // 마이그레이션: 예전 쿠키키(weddit_compare)가 있으면 읽어서 새 키로 승격
+    if (!raw) {
+      const legacy = readCookie(LEGACY_COOKIE_KEY)
+      if (legacy) {
+        raw = legacy
+        // 새 키로 복사(이후 UI는 wedit_compare만 사용)
+        writeCookie(COOKIE_KEY, legacy)
+      }
+    }
     if (!raw) return []
     const decoded = decodeURIComponent(raw)
     const parsed = JSON.parse(decoded)
@@ -67,7 +77,7 @@ export function setCompareIds(ids: string[]) {
   const entries: CompareEntry[] = normalized.map((id) => ({ id }))
   writeCookie(COOKIE_KEY, encodeURIComponent(JSON.stringify(entries)))
   // 같은 탭에서도 UI가 즉시 반응할 수 있게 이벤트 브로드캐스트
-  window.dispatchEvent(new CustomEvent('weddit:compare-changed'))
+  window.dispatchEvent(new CustomEvent('wedit:compare-changed'))
 }
 
 export function setCompareEntries(entries: CompareEntry[]) {
@@ -78,7 +88,7 @@ export function setCompareEntries(entries: CompareEntry[]) {
   const map = new Map<string, CompareEntry>()
   for (const e of normalized) map.set(e.id, e)
   writeCookie(COOKIE_KEY, encodeURIComponent(JSON.stringify(Array.from(map.values()))))
-  window.dispatchEvent(new CustomEvent('weddit:compare-changed'))
+  window.dispatchEvent(new CustomEvent('wedit:compare-changed'))
 }
 
 export function addCompareId(id: string) {

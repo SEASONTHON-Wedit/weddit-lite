@@ -49,7 +49,7 @@ export default function PriceGoStatsLight() {
       <div>
         <div className="h-5 w-48 rounded bg-black/5" />
         <div className="mt-3 h-9 w-80 rounded bg-black/5" />
-        <div className="mt-6 h-[260px] sm:h-[320px] rounded-2xl border border-black/10 bg-white" />
+        <div className="mt-6 h-[260px] lg:h-[320px] rounded-2xl border border-black/10 bg-white" />
       </div>
     )
   }

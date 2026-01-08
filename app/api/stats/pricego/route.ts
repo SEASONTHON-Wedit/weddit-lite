@@ -40,7 +40,7 @@ export async function GET(request: Request) {
     const res = await fetch(url, {
       headers: {
         // 사이트에 따라 UA 없으면 차단되는 경우가 있어 방어적으로 설정
-        'User-Agent': 'Mozilla/5.0 (compatible; WedditLite/1.0)',
+        'User-Agent': 'Mozilla/5.0 (compatible; Wedit/1.0)',
       },
       // 캐시: 1시간
       next: { revalidate: 60 * 60 },

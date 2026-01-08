@@ -105,19 +105,19 @@ export default function Navbar() {
           hidden ? '-translate-y-full' : 'translate-y-0'
         }`}
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
-          <div className="rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between bg-white border border-white shadow-[0_10px_30px_rgba(0,0,0,0.18)]">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8 py-3">
+          <div className="rounded-2xl px-4 lg:px-6 py-3 flex items-center justify-between bg-white border border-white shadow-[0_10px_30px_rgba(0,0,0,0.18)]">
           <Link href="/" className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-xl border border-gray-200 bg-white grid place-items-center">
               <span className="text-sm font-semibold tracking-tight text-gray-900">W</span>
             </div>
             <div className="leading-tight">
-              <div className="text-sm font-semibold tracking-tight text-gray-900">Weddit Lite</div>
+              <div className="text-sm font-semibold tracking-tight text-gray-900">Wedit</div>
               <div className="text-[11px] text-gray-600">가격 비교 · 옵션 추가금 · 통계</div>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden lg:flex items-center gap-2">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -141,7 +141,7 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <div className="flex items-center gap-2">
               <Link
                 href="/notices"
